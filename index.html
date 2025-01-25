@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Text Adventure</title>
+  <style>
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: 'Times New Roman', Times, serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #story-container {
+      max-width: 600px;
+      padding: 20px;
+      border: 1px solid #000;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: justify;
+    }
+
+    #story-text {
+      margin-bottom: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    #choices button {
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    #choices button:hover {
+      background-color: #444444;
+    }
+  </style>
+</head>
+<body>
+  <div id="story-container">
+    <div id="story-text">Welcome to the adventure! Your story will appear here.</div>
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    const story = {
+      start: {
+        text: "You wake up in a dark room. There's a door to your left and a window to your right. What do you do?",
+        choices: [
+          { text: "Open the door", next: "door" },
+          { text: "Look out the window", next: "window" },
+        ],
+      },
+      door: {
+        text: "You open the door and step into a dimly lit hallway. You see a staircase going up and a passage leading down. What do you do?",
+        choices: [
+          { text: "Go upstairs", next: "upstairs" },
+          { text: "Go downstairs", next: "downstairs" },
+        ],
+      },
+      window: {
+        text: "You see a dense forest outside. The window is locked. What do you do?",
+        choices: [
+          { text: "Try to break the window", next: "break_window" },
+          { text: "Step away from the window", next: "start" },
+        ],
+      },
+      upstairs: {
+        text: "You find a dusty attic filled with old furniture. It's eerily quiet. What do you do?",
+        choices: [
+          { text: "Inspect the furniture", next: "furniture" },
+          { text: "Go back downstairs", next: "door" },
+        ],
+      },
+      downstairs: {
+        text: "You descend into a dark basement. You hear faint whispers. What do you do?",
+        choices: [
+          { text: "Investigate the whispers", next: "whispers" },
+          { text: "Run back upstairs", next: "door" },
+        ],
+      },
+      break_window: {
+        text: "You break the window and climb out into the forest. The adventure continues...",
+        choices: [],
+      },
+      furniture: {
+        text: "You find an old diary with strange writings. To be continued...",
+        choices: [],
+      },
+      whispers: {
+        text: "The whispers grow louder, and you feel a presence behind you. To be continued...",
+        choices: [],
+      },
+    };
+
+    function loadStory(section) {
+      const currentSection = story[section];
+      document.getElementById("story-text").innerText = currentSection.text;
+
+      const choiceContainer = document.getElementById("choices");
+      choiceContainer.innerHTML = ""; // Clear previous choices
+
+      currentSection.choices.forEach(choice => {
+        const button = document.createElement("button");
+        button.innerText = choice.text;
+        button.onclick = () => loadStory(choice.next);
+        choiceContainer.appendChild(button);
+      });
+    }
+
+    // Start the story
+    loadStory("start");
+  </script>
+</body>
+</html>
